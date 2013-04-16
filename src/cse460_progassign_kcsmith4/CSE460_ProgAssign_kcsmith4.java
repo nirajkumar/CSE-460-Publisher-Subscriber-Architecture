@@ -12,6 +12,7 @@ public class CSE460_ProgAssign_kcsmith4
     {
         eventBuffer libraryBuffer = new eventBuffer();
         eventItem newEvent;
+        String[] tokens;
         
         if(args.length < 1)
         {
@@ -21,6 +22,12 @@ public class CSE460_ProgAssign_kcsmith4
         
         Scanner reader = new Scanner(new FileInputStream(args[0]));
         while(reader.hasNext())
-            System.out.print(reader);
+        {
+            tokens = reader.next().split(",");
+            newEvent = new eventItem(tokens[0], tokens[1], tokens[2]);
+            libraryBuffer.addEvent(newEvent);
+        }
+        
+        libraryBuffer.dispatchEvents();
     }
 }
