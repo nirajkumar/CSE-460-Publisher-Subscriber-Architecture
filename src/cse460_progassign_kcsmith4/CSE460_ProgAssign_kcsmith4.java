@@ -2,12 +2,17 @@ package cse460_progassign_kcsmith4;
 import java.util.*;
 import java.io.IOException;
 import java.io.FileInputStream;
-
+import java.io.FileWriter;
+import dataObjects.eventItem;
+import util.eventBuffer;
 
 public class CSE460_ProgAssign_kcsmith4
 {
     public static void main(String[] args) throws IOException
     {
+        eventBuffer libraryBuffer = new eventBuffer();
+        eventItem newEvent;
+        
         if(args.length < 1)
         {
             System.out.println("Error, usage: java ClassName inputfile");
@@ -16,6 +21,6 @@ public class CSE460_ProgAssign_kcsmith4
         
         Scanner reader = new Scanner(new FileInputStream(args[0]));
         while(reader.hasNext())
-            System.out.print(reader.next() + "\n");
+            System.out.print(reader);
     }
 }
