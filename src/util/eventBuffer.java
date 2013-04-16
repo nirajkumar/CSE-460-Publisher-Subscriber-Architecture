@@ -26,7 +26,7 @@ public class eventBuffer
                 {
                     if(buffer.get(j).getBookType().equals(buffer.get(i).getBookType()))
                         System.out.print(buffer.get(j).getSenderName() + " notified of a "
-                                         + buffer.get(j).getBookType() + " book from " + buffer.get(i).getSenderName());
+                                         + buffer.get(j).getBookType() + " book from " + buffer.get(i).getSenderName() + "\n");
                 }
         }
     }
