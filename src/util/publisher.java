@@ -13,6 +13,7 @@ public class publisher implements eventItem
     private String _sender;     //Publisher name
     private String _bookType;   //Type of book checked into library
     
+    //publisher constructor
     public publisher(String sender, String book)
     {
         this._sender = sender;

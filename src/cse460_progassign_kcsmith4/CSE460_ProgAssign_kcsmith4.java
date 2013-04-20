@@ -2,7 +2,8 @@ package cse460_progassign_kcsmith4;
 import java.util.*;
 import java.io.IOException;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.File;
 import dataObjects.eventItem;
 import util.eventBuffer;
 import util.publisher;
@@ -16,11 +17,12 @@ public class CSE460_ProgAssign_kcsmith4
 {
     public static void main(String[] args) throws IOException
     {
-        eventBuffer libraryBuffer = new eventBuffer();  //Instance of eventBuffer to act as message broker
-        eventItem newEvent;                             //Temp instance of eventItem to represent each event
-        String[] tokens;                                //Store tokens of each line of input, stores 1 line at a time
+        eventBuffer libraryBuffer;                       //Instance of eventBuffer to act as message broker
+        eventItem newEvent;                              //Temp instance of eventItem to represent each event
+        String[] tokens;                                 //Store tokens of each line of input, stores 1 line at a time
+        File myFile;                                     //File for the output
         
-        //Check to make sure there is a command line arguement
+        //Check to make sure there is a command line arguement, if not throw error and exit
         if(args.length < 1)
         {
             System.out.println("Error, usage: java " + CSE460_ProgAssign_kcsmith4.class.getSimpleName() + " inputfile");
@@ -28,7 +30,14 @@ public class CSE460_ProgAssign_kcsmith4
         }
         
         Scanner reader = new Scanner(new FileInputStream(args[0]));             //Read in all lines from command line input file
-        while(reader.hasNext())
+        
+        myFile = new File(args[1]);                                             //Set output file to command line output file
+        if(!myFile.exists())                                                    //Check if command line output file exists
+            myFile.createNewFile();                                             //If output file does not exist, create it
+        
+        libraryBuffer = new eventBuffer(myFile);                                //Create new eventBuffer
+        
+        while(reader.hasNext())                                                 //Cycle through input text until EOF is found
         {
             tokens = reader.next().split(",");                                  //Tokenize string using commas as a delimiter
             
@@ -40,6 +49,6 @@ public class CSE460_ProgAssign_kcsmith4
             libraryBuffer.addEvent(newEvent);                                   //Add new event to the queue
         }
         
-        libraryBuffer.dispatchEvents();                                         //Process event queue
+        libraryBuffer.dispatchEvents();                                         //Process event queue and split responses into tokens at \n character
     }
 }
