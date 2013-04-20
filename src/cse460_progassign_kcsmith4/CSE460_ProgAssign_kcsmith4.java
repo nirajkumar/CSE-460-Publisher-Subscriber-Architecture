@@ -5,6 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import dataObjects.eventItem;
 import util.eventBuffer;
+import util.publisher;
+import util.subscriber;
+
+/* Author: Kenneth Smith 4/19/2013
+ * Driver program for the publisher/subscriber architecture assignment
+ */
 
 public class CSE460_ProgAssign_kcsmith4
 {
@@ -21,14 +27,19 @@ public class CSE460_ProgAssign_kcsmith4
             System.exit(1);
         }
         
-        Scanner reader = new Scanner(new FileInputStream(args[0]));     //Read in all lines from command line input file
+        Scanner reader = new Scanner(new FileInputStream(args[0]));             //Read in all lines from command line input file
         while(reader.hasNext())
         {
-            tokens = reader.next().split(",");                          //Tokenize string using commas as a delimiter
-            newEvent = new eventItem(tokens[0], tokens[1], tokens[2]);  //Create new event object.  token[0] = event type, token[1] = sender's name, token[2] = book topic
-            libraryBuffer.addEvent(newEvent);                           //Add new event to the queue
+            tokens = reader.next().split(",");                                  //Tokenize string using commas as a delimiter
+            
+            if(tokens[0].equals("Publish") || tokens[0].equals("publish"))      //if tokens[0] = "Publish" then create a new publisher object
+              newEvent = new publisher(tokens[1], tokens[2]);          
+            else                                                                //if tokens[0] = "Subscribe" then create a new subscriber object
+              newEvent = new subscriber(tokens[1], tokens[2]);
+            
+            libraryBuffer.addEvent(newEvent);                                   //Add new event to the queue
         }
         
-        libraryBuffer.dispatchEvents();                                 //Process event queue
+        libraryBuffer.dispatchEvents();                                         //Process event queue
     }
 }
