@@ -37,10 +37,4 @@ public class publisher implements eventItem
     {
         return this._bookType;
     }
-    
-    //Notify subscriber requesting book
-    public void bufferMessage(eventItem event)
-    {
-        event.bufferMessage(this);
-    }
 }

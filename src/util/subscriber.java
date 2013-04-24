@@ -1,6 +1,7 @@
 package util;
 import java.util.*;
 import dataObjects.eventItem;
+import java.io.PrintWriter;
 
 /* Author: Kenneth Smith 4/19/2013
  * Java class to represent the subscriber in a publisher/subscriber
@@ -9,15 +10,17 @@ import dataObjects.eventItem;
 
 public class subscriber implements eventItem
 {
-    private String _sender;     //Subscriber's name 
-    private String _bookType;   //Book type requested by the subscriber
-    private String _message;
+    private String _sender;             //Subscriber's name 
+    private String _bookType;           //Book type requested by the subscriber
+    private String _message;            //Notification message of publisher event for this subscriber
+    private PrintWriter _myWriter;      //PrintWriter to write subscriber's notification message to output text file constructed in main class  
     
-    public subscriber(String sender, String book)
+    public subscriber(String sender, String book, PrintWriter outputWriter)
     {
         this._sender = sender;
         this._bookType = book;
         this._message = "";
+        this._myWriter = outputWriter;
     }
     
     //Return the eventItem's interface class
@@ -38,16 +41,17 @@ public class subscriber implements eventItem
         return this._bookType;
     }
     
-    //Returns notification of publisher event
-    public String getNoticeMessage()
+    //Writes notification message to a text file
+    public void writeOutput()
     {
-        return this._message;
+        _myWriter.println(_message);
     }
     
     //Recieve notice from publisher that the requested book has been checked in
-    public void bufferMessage(eventItem event)
+    public void bufferMessage(String publisherName)
     {
        _message = this.getSenderName() + " notified of a " + this.getBookType()
-                        + " book from " + event.getSenderName();
+                        + " book from " + publisherName;
+       writeOutput();
     }
 }

@@ -1,9 +1,5 @@
 package util;
 import java.util.*;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import dataObjects.eventItem;
 
@@ -14,53 +10,32 @@ import dataObjects.eventItem;
 
 public class eventBuffer
 {
-    private List<eventItem> buffer;     //Arraylist to represent event queue
-    private FileWriter myFileWriter;    //FileWriter to passing output to text file
-    private PrintWriter myWriter;       //PrintWriter to pass formated output to FileWriter
-    
+    private List<eventItem> eventPool;  //Arraylist to represent the subscriber events in the event pool
+ 
     //eventBuffer constructor
-    public eventBuffer(File myFile) throws IOException
+    public eventBuffer()
     {
-        buffer = new ArrayList<eventItem>();
-        buffer.clear();
-        myFileWriter = new FileWriter(myFile.getAbsoluteFile());
-        myWriter = new PrintWriter(myFileWriter);
+        eventPool = new ArrayList<eventItem>();     //Initial arrayList
+        eventPool.clear();                          //Error prevention, not really necessary.
     }
     
     //Add a new event to the queue
     public void addEvent(eventItem newEvent)
     {
-        buffer.add(newEvent);
+        eventPool.add(newEvent);
     }
     
-    //Return event at a given position
-    public eventItem getItem(int position)
+    //Look for a subscriber event that is subscribed to the publisher event. If found, notify subscriber.
+    public void dispatchEvent(eventItem publisherEvent)
     {
-        return buffer.get(position);
-    }
-    
-    //Look for a publisher type event, when found, look for prior subscribers to that event
-    public void dispatchEvents()  throws IOException
-    {
-        subscriber temp;                                                                 //Subscriber variable to access non-interfaced subscriber functions
+        subscriber theSubscriber;                                                       //Temp subscriber variable to call non-interfaced subscriber methods
         
-        for(int i = 0; i < buffer.size(); i++)                                           //Iterate through arraylist to find publisher event
-        {
-            if(buffer.get(i).getEventType().equals("publisher"))                         //Check current event's class type
+        for(int i = 0; i < eventPool.size(); i++)                                       //Cycle through eventPool (subscribers)
+            if(publisherEvent.getBookType().equals(eventPool.get(i).getBookType()))     //Check if publisher event book type = current subscriber book type  
             {
-                for(int j = 0; j < i; j++)                                               //Iterate through arraylist from beginning to current publisher event
-                {
-                    if(buffer.get(j).getBookType().equals(buffer.get(i).getBookType()))  //If subscriber book type = publisher book type
-                    {
-                        buffer.get(i).bufferMessage(buffer.get(j));                      // Notify subscriber
-                        temp = (subscriber)buffer.get(j);                                // Get subscriber's notification confirmation message                           
-                        myWriter.println(temp.getNoticeMessage());                       // Write output to text file
-                    }
-                }
+                theSubscriber = (subscriber)eventPool.get(i);                           //Set temp subscriber to type cast of eventItem 
+                theSubscriber.bufferMessage(publisherEvent.getSenderName());            //Notify subscriber 
             }
-        }
-        
-        myWriter.close();                                                                //Close output text file
     }
 }
     

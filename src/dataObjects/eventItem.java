@@ -16,7 +16,4 @@ public interface eventItem
     
     //Returns the book topic for this event
     public String getBookType();
-    
-    //Notify subscriber of a publisher event
-    public void bufferMessage(eventItem event);
 }
